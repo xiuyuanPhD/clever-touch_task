@@ -22,6 +22,7 @@ def normalize_dataset(df):
 import pandas as pd
 import numpy as np
 
+
 Behavioural_file_name='Behavioural Data.jsonl'
 Behavioural_table=pd.read_json(path_or_buf=Behavioural_file_name,lines=True)
 Activity_file_name='Activity Data.csv'
@@ -67,6 +68,37 @@ print(Behavioural_table['source'].unique())
 print(Activity_table['activity_type'].unique())
 print(Activity_table['detail'].unique())
 
+#To detele all na values
+Activity_table=Activity_table.dropna(subset=['campaign_id','person_id'])
+Behavioural_table=Behavioural_table.dropna(subset=['campaign','person'])
+
+#sort the data by pampaign, person and time
+# Behavioural_table=Behavioural_table.sort_values(by=['campaign','person','time'])
+# Activity_table=Activity_table.sort_values(by=['campaign_id','person_id','timestamp'])
+
+#Rename behavioural table
+
+Behavioural_table=Behavioural_table.rename(columns={"id":"activity_id","campaign":"campaign_id","person":"person_id","type":"activity_type","time":"timestamp"})
+#Delete column duration_seconds in behavioural table
+
+Behavioural_table=Behavioural_table.drop(columns='duration_seconds')
+
+# Behavioural_table=Behavioural_table.sort_values(by=['person_id','campaign_id','timestamp'])
+# Activity_table=Activity_table.sort_values(by=['person_id','campaign_id','timestamp'])
+
+#To merge two tables
+
+Final_data=pd.concat([Activity_table,Behavioural_table])
+
+#Sort based on person id
+Final_data=Final_data.sort_values(by=['person_id','campaign_id','timestamp'])
+
+#delete rows with unknown activity type
+mask=Final_data['activity_type']=='unknown'
+Final_data=Final_data[~mask]
+
 #Data cleansing completed
 
+#Output data into excel
+Final_data.to_excel('structured_final_data.xlsx')
 
