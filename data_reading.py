@@ -98,6 +98,8 @@ mask=Final_data['activity_type']=='unknown'
 Final_data=Final_data[~mask]
 
 #Data cleansing completed
+#Merge campaign table into final data
+Final_data=Final_data.join(Campaigns_table.set_index('campaign_id'),on='campaign_id')
 
 #Output data into excel
 Final_data.to_excel('structured_final_data.xlsx')
