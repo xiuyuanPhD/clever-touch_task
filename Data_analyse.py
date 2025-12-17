@@ -11,8 +11,9 @@ Created on Mon Dec 15 14:19:01 2025
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
-dataset=pd.read_excel('output/structured_final_data.xlsx')
+dataset=pd.read_excel(os.path.join('output','structured_final_data.xlsx'))
 
 #Count number of activities, and most commonly engaged activity type per campaign
 max_campaign=max(dataset['campaign_id'])
@@ -50,12 +51,12 @@ num_per_owner=dataset['owner'].value_counts()
 num_per_person=dataset['person_id'].value_counts()
 
 #Write result into the excel
-
-with pd.ExcelWriter('output/output_result.xlsx') as writer:
+excel_output_path=os.path.join('output','output_result.xlsx')
+with pd.ExcelWriter(excel_output_path) as writer:
     Num_of_activity.to_excel(writer,sheet_name='num_of_activities')
     num_per_owner.to_excel(writer,sheet_name='num_per_owner')
     num_per_person.to_excel(writer,sheet_name='num_per_person')
-print(np.mean(num_per_person))
+
 
 #output the figure of number per campaign and save into bar_chart_num_per_campaign.png
 fig,ax=plt.subplots()
@@ -65,7 +66,7 @@ plt.bar(Num_of_activity.Campaign_number.astype('str'),Num_of_activity.Number_of_
 plt.xlabel('Campaign number')
 plt.ylabel('Number of activities per campaign')
 plt.show()
-fig.savefig('output/bar_chart_num_per_campaign.png')
+fig.savefig(os.path.join('output','bar_chart_num_per_campaign.png'))
 
 #Analyse the event count for each campaign
 for i in range(15):
@@ -78,7 +79,7 @@ for i in range(15):
     plt.ylabel('Number of activities')
     title_label='Campaign '+str(Campaign_number_idx)
     plt.title(title_label)
-    filename='output/'+title_label+'.png'
+    filename=os.path.join('output',title_label+'.png')
     fig.savefig(filename)
     
     

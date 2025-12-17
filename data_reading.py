@@ -11,12 +11,7 @@ def normalize_dataset(df):
     K=df.str.lower()
     K=K.str.replace('-','_').str.replace(' ','_').replace('','unknown').replace(np.nan,'unknown').str.replace('_','')
     
-    
-    
     return K
-    
-    
-    
     
 
 import pandas as pd
@@ -114,5 +109,6 @@ Final_data=Final_data.join(Campaigns_table.set_index('campaign_id'),on='campaign
 #Output data into excel
 if not os.path.exists('output'): 
     os.mkdir('output')
-Final_data.to_excel('output/structured_final_data.xlsx')
+Filepath=os.path.join('output','structured_final_data.xlsx')
+Final_data.to_excel(Filepath)
 
