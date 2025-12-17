@@ -31,6 +31,11 @@ Campaigns_file_name='Campaigns Data.parquet'
 Campaigns_table=pd.read_parquet(Campaigns_file_name,engine='fastparquet') #Need to install pip fastparquet
 Activity_table.timestamp=pd.to_datetime(Activity_table.timestamp,format='mixed') # To format the timestamp in Activity_table.timestamp
 Behavioural_table.time=pd.to_datetime(Behavioural_table.time.str.replace('T',' '),format='mixed')
+
+#To delete duplicate based on activity id
+Behavioural_table=Behavioural_table.drop_duplicates(subset='id')
+Activity_table=Activity_table.drop_duplicates(subset='activity_id')
+
 #---------Following is to split the dict of meta into columns and merge into Behavioural_table
 list_temp1=pd.DataFrame(Behavioural_table['meta'].tolist())
 Behavioural_table=Behavioural_table.join(list_temp1)
@@ -69,8 +74,13 @@ print(Activity_table['activity_type'].unique())
 print(Activity_table['detail'].unique())
 
 #To detele all na values
-Activity_table=Activity_table.dropna(subset=['campaign_id','person_id'])
-Behavioural_table=Behavioural_table.dropna(subset=['campaign','person'])
+# Activity_table=Activity_table.dropna(subset=['campaign_id','person_id'])
+# Behavioural_table=Behavioural_table.dropna(subset=['campaign','person'])
+
+#Decided not to drop rows with nan person_id
+
+Activity_table=Activity_table.dropna(subset=['campaign_id'])
+Behavioural_table=Behavioural_table.dropna(subset=['campaign'])
 
 #sort the data by pampaign, person and time
 # Behavioural_table=Behavioural_table.sort_values(by=['campaign','person','time'])

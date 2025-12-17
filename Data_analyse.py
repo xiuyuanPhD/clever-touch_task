@@ -21,6 +21,9 @@ campaign_count=[]
 most_activity=[]
 Second_activity=[]
 Third_activity=[]
+Most_activity_count=[]
+Second_activiey_count=[]
+Third_activity_count=[]
 for campaign_num in range(max_campaign):
     #print(campaign_num+1)
     k=dataset['campaign_id']==campaign_num+1
@@ -32,8 +35,12 @@ for campaign_num in range(max_campaign):
     campaign_count.append(l.size)
     most_activity.append(max_activity)
     Second_activity.append(activity_count.index[1])
-    Third_activity.append(activity_count.index[3])
-Num_of_activity=pd.DataFrame(data={'Campaign_number':list_num,'Numer_of_activity':campaign_count,'Most_activity':most_activity,'Second_activity':Second_activity,'Third_activity':Third_activity})
+    Third_activity.append(activity_count.index[2])
+    Most_activity_count.append(activity_count.array[0].item())
+    Second_activiey_count.append(activity_count.array[1].item())
+    Third_activity_count.append(activity_count.array[2].item())
+Num_of_activity=pd.DataFrame(data={'Campaign_number':list_num,'Number_of_activities':campaign_count,'Most_activity':most_activity,'Most_activity_count':Most_activity_count,
+                                   'Second_activity':Second_activity,'Second_activity_count':Second_activiey_count,'Third_activity':Third_activity,'Third_activity_count':Third_activity_count})
 
 
 #Number of activiey per owner
@@ -49,7 +56,31 @@ with pd.ExcelWriter('output_result.xlsx') as writer:
     num_per_owner.to_excel(writer,sheet_name='num_per_owner')
     num_per_person.to_excel(writer,sheet_name='num_per_person')
 print(np.mean(num_per_person))
-fig,ax=plt.subplots()
-ax.hist(num_per_person,10)
 
+#output the figure of number per campaign and save into bar_chart_num_per_campaign.png
+fig,ax=plt.subplots()
+
+
+plt.bar(Num_of_activity.Campaign_number.astype('str'),Num_of_activity.Number_of_activities)
+plt.xlabel('Campaign number')
+plt.ylabel('Number of activities per campaign')
 plt.show()
+fig.savefig('bar_chart_num_per_campaign.png')
+
+#Analyse the event count for each campaign
+for i in range(15):
+    Campaign_number_idx=i+1
+    x_label=Num_of_activity.loc[i,['Most_activity','Second_activity','Third_activity']]
+    y_value=Num_of_activity.loc[i,['Most_activity_count','Second_activity_count','Third_activity_count']]
+    fig,ax=plt.subplots()
+    plt.bar(x_label,y_value)
+    plt.xlabel('Activity type')
+    plt.ylabel('Number of activities')
+    title_label='Campaign '+str(Campaign_number_idx)
+    plt.title(title_label)
+    filename=title_label+'.png'
+    fig.savefig(filename)
+    
+    
+    
+    
