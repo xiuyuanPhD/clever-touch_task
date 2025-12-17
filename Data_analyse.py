@@ -12,7 +12,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-dataset=pd.read_excel('structured_final_data.xlsx')
+dataset=pd.read_excel('output/structured_final_data.xlsx')
 
 #Count number of activities, and most commonly engaged activity type per campaign
 max_campaign=max(dataset['campaign_id'])
@@ -51,7 +51,7 @@ num_per_person=dataset['person_id'].value_counts()
 
 #Write result into the excel
 
-with pd.ExcelWriter('output_result.xlsx') as writer:
+with pd.ExcelWriter('output/output_result.xlsx') as writer:
     Num_of_activity.to_excel(writer,sheet_name='num_of_activities')
     num_per_owner.to_excel(writer,sheet_name='num_per_owner')
     num_per_person.to_excel(writer,sheet_name='num_per_person')
@@ -65,7 +65,7 @@ plt.bar(Num_of_activity.Campaign_number.astype('str'),Num_of_activity.Number_of_
 plt.xlabel('Campaign number')
 plt.ylabel('Number of activities per campaign')
 plt.show()
-fig.savefig('bar_chart_num_per_campaign.png')
+fig.savefig('output/bar_chart_num_per_campaign.png')
 
 #Analyse the event count for each campaign
 for i in range(15):
@@ -78,7 +78,7 @@ for i in range(15):
     plt.ylabel('Number of activities')
     title_label='Campaign '+str(Campaign_number_idx)
     plt.title(title_label)
-    filename=title_label+'.png'
+    filename='output/'+title_label+'.png'
     fig.savefig(filename)
     
     

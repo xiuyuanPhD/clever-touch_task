@@ -21,7 +21,7 @@ def normalize_dataset(df):
 
 import pandas as pd
 import numpy as np
-
+import os
 
 Behavioural_file_name='Behavioural Data.jsonl'
 Behavioural_table=pd.read_json(path_or_buf=Behavioural_file_name,lines=True)
@@ -112,5 +112,6 @@ Final_data=Final_data[~mask]
 Final_data=Final_data.join(Campaigns_table.set_index('campaign_id'),on='campaign_id')
 
 #Output data into excel
-Final_data.to_excel('structured_final_data.xlsx')
+os.mkdir('output')
+Final_data.to_excel('output/structured_final_data.xlsx')
 
