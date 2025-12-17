@@ -112,6 +112,7 @@ Final_data=Final_data[~mask]
 Final_data=Final_data.join(Campaigns_table.set_index('campaign_id'),on='campaign_id')
 
 #Output data into excel
-os.mkdir('output')
+if not os.path.exists('output'): 
+    os.mkdir('output')
 Final_data.to_excel('output/structured_final_data.xlsx')
 
